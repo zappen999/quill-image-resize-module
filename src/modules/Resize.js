@@ -76,6 +76,11 @@ export class Resize extends BaseModule {
         document.removeEventListener('mouseup', this.handleMouseup);
     };
 
+    getNewWidth = (width) => {
+        return width > this.options.maxImageWidth
+            ? this.options.maxImageWidth : width;
+    };
+
     handleDrag = (evt) => {
         if (!this.img) {
             // image not set yet
@@ -85,10 +90,10 @@ export class Resize extends BaseModule {
         const deltaX = evt.clientX - this.dragStartX;
         if (this.dragBox === this.boxes[0] || this.dragBox === this.boxes[3]) {
             // left-side resize handler; dragging right shrinks image
-            this.img.width = Math.round(this.preDragWidth - deltaX);
+            this.img.width = this.getNewWidth(Math.round(this.preDragWidth - deltaX));
         } else {
             // right-side resize handler; dragging right enlarges image
-            this.img.width = Math.round(this.preDragWidth + deltaX);
+            this.img.width = this.getNewWidth(Math.round(this.preDragWidth + deltaX));
         }
         this.requestUpdate();
     };
